@@ -1,7 +1,7 @@
 // src/services/api.js
 import axios from 'axios';
 
-const baseURL = 'https://luxevie-backend-qiz2zjce9-duy10102003s-projects.vercel.app/api';
+const baseURL = 'https://luxevie-backend-five.vercel.app/api';
 
 export function getToken() {
   // cố gắng đọc theo vài kiểu lưu phổ biến
