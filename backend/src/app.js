@@ -16,7 +16,8 @@ app.use(helmet());
 const allowed = [
   process.env.CLIENT_URL,           // ví dụ http://localhost:5173
   'http://localhost:5173',
-  'http://127.0.0.1:5173'
+  'http://127.0.0.1:5173',
+  'https://luxevie-frontend.vercel.app',
 ].filter(Boolean);
 app.use(cors({
   origin: allowed,
