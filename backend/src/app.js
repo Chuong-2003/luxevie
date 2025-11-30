@@ -60,7 +60,6 @@ const authLimiter = rateLimit({
 
 app.use("/api", apiLimiter);
 app.use("/api/auth", authLimiter);
-app.options("*", cors());
 // ✅ Mount “index routes” – tất cả route con sẽ đi qua đây
 app.use("/api", routes);
 
