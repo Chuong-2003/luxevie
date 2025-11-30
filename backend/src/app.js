@@ -12,7 +12,7 @@ const app = express();
 app.use(helmet());
 
 const allowed = [
-  process.env.CLIENT_URL, // trên Vercel set = https://luxevie-frontend.vercel.app
+  process.env.CLIENT_URL,
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "https://luxevie-frontend.vercel.app",
@@ -22,16 +22,13 @@ const allowed = [
 app.use(
   cors({
     origin(origin, callback) {
-      // request không có Origin (Postman, health check) -> cho qua
       if (!origin) return callback(null, true);
-
-      if (allowed.includes(origin)) {
-        return callback(null, true); // cho phép
-      }
+      if (allowed.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // nếu dùng cookie
   })
 );
 
