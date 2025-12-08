@@ -111,7 +111,7 @@ const CouponCard = ({ coupon, onToggle, onRemove }) => {
         </div>
         <div className="flex space-x-2">
           <button 
-            style={{display:none}}
+            style={{display:"none"}}
             onClick={() => onToggle(coupon)}
             className={`inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
               coupon.active 
