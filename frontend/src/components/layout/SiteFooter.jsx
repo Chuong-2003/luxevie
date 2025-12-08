@@ -1,5 +1,6 @@
 export default function SiteFooter(){
   return (
+    <>
     <footer className="bg-gray-900 text-white pt-16 pb-8" id="about">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -52,5 +53,28 @@ export default function SiteFooter(){
         </div>
       </div>
     </footer>
+          <a 
+        href="https://zalo.me/0394379537"
+        target="_blank"
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: 9999,
+        }}
+      >
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/768px-Icon_of_Zalo.svg.png"
+          alt="Zalo"
+          style={{
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+            cursor: "pointer"
+          }}
+        />
+      </a>
+      </>
   );
 }
