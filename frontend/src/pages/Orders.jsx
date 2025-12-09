@@ -136,7 +136,7 @@ export default function Orders() {
                     >
                       Xem
                     </Link>
-                    {['pending', 'confirmed'].includes(o.status) && (
+                    {['pending'].includes(o.status) && (
                       <button
                         onClick={() => onCancel(o._id)}
                         className="px-3 py-1.5 border rounded text-red-600 hover:bg-red-50"
