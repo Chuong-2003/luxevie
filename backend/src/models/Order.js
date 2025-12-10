@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const OrderItemSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true, index: true },
   name: String,
+  image: String, // snapshot ảnh lúc mua
   sku: String,
   color: String,
   size: String,
@@ -14,11 +15,13 @@ const AddressSchema = new mongoose.Schema({
   fullName: String,
   phone: String,
   email: String,
+  address: String, // địa chỉ cụ thể (frontend field)
   line1: String,
   line2: String,
   ward: String,
   district: String,
   city: String,
+  province: String, // frontend field
 }, { _id: false });
 
 const OrderSchema = new mongoose.Schema({
@@ -35,11 +38,11 @@ const OrderSchema = new mongoose.Schema({
   discount: { type: Number, default: 0 },
   total: { type: Number, required: true },
 
-  status: { 
-    type: String, 
-    enum: ['pending','confirmed','processing','shipped','delivered','cancelled','refunded'], 
-    default: 'pending', 
-    index: true 
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'],
+    default: 'pending',
+    index: true
   },
   paid: { type: Boolean, default: false },
 
