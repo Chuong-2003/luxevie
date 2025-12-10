@@ -58,18 +58,18 @@ function Gallery({ images = [] }) {
   const [idx, setIdx] = useState(0);
   const src = imgOf(images[idx]) || imgOf(images[0]);
   if (!images?.length) return <div className="w-full aspect-[4/5] bg-neutral-100 rounded-xl" />;
-  
+
   const totalImages = images.length;
   const goPrev = () => setIdx((prev) => (prev - 1 + totalImages) % totalImages);
   const goNext = () => setIdx((prev) => (prev + 1) % totalImages);
-  
+
   return (
     <div className="space-y-3">
       {/* Ảnh chính với nút điều hướng */}
       <div className="relative rounded-xl overflow-hidden border bg-white">
         <div className="w-full aspect-[4/5] bg-neutral-100 max-w-md mx-auto relative">
           <img src={src} alt="product" className="w-full h-full object-cover" />
-          
+
           {/* Nút điều hướng - chỉ hiển thị khi có nhiều hơn 1 ảnh */}
           {totalImages > 1 && (
             <>
@@ -83,7 +83,7 @@ function Gallery({ images = [] }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
+
               {/* Nút Next (Phải) */}
               <button
                 onClick={goNext}
@@ -98,7 +98,7 @@ function Gallery({ images = [] }) {
           )}
         </div>
       </div>
-      
+
       {/* Thumbnails - hiển thị ngang ở dưới */}
       <div className="flex gap-2 overflow-x-auto snap-x pb-2">
         {images.map((im, i) => (
@@ -150,15 +150,15 @@ function Accordion({ items }) {
 function RatingSummary({ reviews = [] }) {
   const count = reviews.length;
   const avg = count ? reviews.reduce((s, r) => s + (r.rating || 0), 0) / count : 0;
-   return (
-     <div className="flex items-center gap-2">
-       <StarRating value={avg} readOnly size={18} />
+  return (
+    <div className="flex items-center gap-2">
+      <StarRating value={avg} readOnly size={18} />
       {/* <span className="text-sm text-gray-600">{count ? `${avg.toFixed(1)} / 5 (${count})` : 'Chưa có đánh giá'}</span> */}
       <span className="text-sm text-gray-600">
         {count ? `${avg.toFixed(1)} / 5 (${count})` : 'Chưa có đánh giá'}
       </span>
-     </div>
-   );
+    </div>
+  );
 }
 
 // Product Carousel Section Component
@@ -213,9 +213,9 @@ function ProductCarouselSection({ title, products }) {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xl md:text-2xl font-semibold">{title}</h2>
       </div>
-      
+
       <div className="relative">
-        <div 
+        <div
           ref={scrollContainerRef}
           className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"
           onScroll={checkScrollButtons}
@@ -232,7 +232,7 @@ function ProductCarouselSection({ title, products }) {
           <>
             {/* Left Arrow */}
             {canScrollLeft && (
-              <button 
+              <button
                 onClick={scrollLeft}
                 className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-gray-300 shadow-lg flex items-center justify-center hover:bg-gray-50 hover:shadow-xl transition-all z-10"
                 aria-label="Scroll left"
@@ -242,10 +242,10 @@ function ProductCarouselSection({ title, products }) {
                 </svg>
               </button>
             )}
-            
+
             {/* Right Arrow */}
             {canScrollRight && (
-              <button 
+              <button
                 onClick={scrollRight}
                 className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-gray-300 shadow-lg flex items-center justify-center hover:bg-gray-50 hover:shadow-xl transition-all z-10"
                 aria-label="Scroll right"
@@ -281,9 +281,9 @@ export default function ProductDetail() {
   const [localReviews, setLocalReviews] = useState([]);
   // const [reviewForm, setReviewForm] = useState({ rating: 5, name: '', content: '' });
 
- const [reviews, setReviews] = useState([]);
- const [reviewForm, setReviewForm] = useState({ rating: 5, name: '', content: '' });
- const [rvLoading, setRvLoading] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({ rating: 5, name: '', content: '' });
+  const [rvLoading, setRvLoading] = useState(false);
 
   // Tự động điền tên user nếu đã đăng nhập (đã bỏ trường name, dùng từ user)
   // useEffect không cần thiết nữa vì form chỉ hiển thị khi đã đăng nhập
@@ -293,13 +293,13 @@ export default function ProductDetail() {
 
   const selectedVariant = useMemo(() => {
     if (!variants.length) return null;
-      const exact = variants.find(
-    v => (color ? v.color === color : true) && (size ? v.size === size : true)
-  );
-  if (exact) return exact;
-  // fallback: lấy biến thể còn hàng
-  const firstInStock = variants.find(v => (v.stock || 0) > 0);
-  return firstInStock || variants[0] || null;
+    const exact = variants.find(
+      v => (color ? v.color === color : true) && (size ? v.size === size : true)
+    );
+    if (exact) return exact;
+    // fallback: lấy biến thể còn hàng
+    const firstInStock = variants.find(v => (v.stock || 0) > 0);
+    return firstInStock || variants[0] || null;
   }, [variants, color, size]);
 
   // ✅ HOOK này đặt trước mọi return
@@ -316,83 +316,83 @@ export default function ProductDetail() {
     (!variants.length || (size || colors.length === 0));
 
   useEffect(() => {
-  let alive = true;
-  (async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get(`/products/${id}`);
-      if (!alive) return;
-
-      const prod = data.product;
-      setP(prod);
-
-      /* (a) ✅ Preselect biến thể còn hàng
-         - Nếu có variants: chọn biến thể đầu tiên còn stock > 0 (nếu không có, chọn biến thể đầu tiên)
-         - Set luôn cả color/size nếu có
-         - Nếu không có variants nhưng có danh sách sizes: có thể preselect size đầu tiên (tuỳ bạn, có thể bỏ nếu muốn bắt user chọn)
-      */
-      if (Array.isArray(prod?.variants) && prod.variants.length) {
-        const vInStock = prod.variants.find(v => (v.stock || 0) > 0) || prod.variants[0];
-        if (vInStock) {
-          if (vInStock.color) setColor(vInStock.color);
-          if (vInStock.size) setSize(vInStock.size);
-        }
-      } else {
-        // Không có variants: tuỳ chọn preselect size đầu tiên (nếu bạn có mảng sizes riêng)
-        if (Array.isArray(prod?.sizes) && prod.sizes.length) {
-          setSize(prod.sizes[0]);
-        }
-      }
-
-      // Related products (by brand and category)
-      const rel = await api.get(`/products/${id}/related`);
-      if (alive) setRelated((rel?.data?.items || []).slice(0, 10));
-
-      // Bestsellers (top 10 most sold products)
-      const bestsellersRes = await api.get('/products', {
-        params: { sort: 'sold_desc', limit: 10, status: 'active' }
-      });
-      if (alive) setBestsellers((bestsellersRes?.data?.items || []).filter(item => item._id !== id));
-
-      // Promotions (products with salePrice, sorted by discount percentage)
-      const promotionsRes = await api.get('/products', {
-        params: { saleOnly: 'true', limit: 50, status: 'active' }
-      });
-      if (alive) {
-        const allPromotions = promotionsRes?.data?.items || [];
-        const productsWithDiscount = allPromotions
-          .filter(item => {
-            const price = item.price || 0;
-            const salePrice = item.salePrice || 0;
-            return salePrice > 0 && salePrice < price && item._id !== id;
-          })
-          .map(item => {
-            const price = item.price || 0;
-            const salePrice = item.salePrice || 0;
-            const discount = ((price - salePrice) / price) * 100;
-            return { ...item, discount };
-          })
-          .sort((a, b) => b.discount - a.discount)
-          .slice(0, 10);
-        setPromotions(productsWithDiscount);
-      }
-
-      // 🔽 Reviews thật
-      setRvLoading(true);
+    let alive = true;
+    (async () => {
       try {
-        const rv = await fetchReviews(id, { page: 1, limit: 20 });
-        if (alive) setReviews(rv.items || []);
+        setLoading(true);
+        const { data } = await api.get(`/products/${id}`);
+        if (!alive) return;
+
+        const prod = data.product;
+        setP(prod);
+
+        /* (a) ✅ Preselect biến thể còn hàng
+           - Nếu có variants: chọn biến thể đầu tiên còn stock > 0 (nếu không có, chọn biến thể đầu tiên)
+           - Set luôn cả color/size nếu có
+           - Nếu không có variants nhưng có danh sách sizes: có thể preselect size đầu tiên (tuỳ bạn, có thể bỏ nếu muốn bắt user chọn)
+        */
+        if (Array.isArray(prod?.variants) && prod.variants.length) {
+          const vInStock = prod.variants.find(v => (v.stock || 0) > 0) || prod.variants[0];
+          if (vInStock) {
+            if (vInStock.color) setColor(vInStock.color);
+            if (vInStock.size) setSize(vInStock.size);
+          }
+        } else {
+          // Không có variants: tuỳ chọn preselect size đầu tiên (nếu bạn có mảng sizes riêng)
+          if (Array.isArray(prod?.sizes) && prod.sizes.length) {
+            setSize(prod.sizes[0]);
+          }
+        }
+
+        // Related products (by brand and category)
+        const rel = await api.get(`/products/${id}/related`);
+        if (alive) setRelated((rel?.data?.items || []).slice(0, 10));
+
+        // Bestsellers (top 10 most sold products)
+        const bestsellersRes = await api.get('/products', {
+          params: { sort: 'sold_desc', limit: 10, status: 'active' }
+        });
+        if (alive) setBestsellers((bestsellersRes?.data?.items || []).filter(item => item._id !== id));
+
+        // Promotions (products with salePrice, sorted by discount percentage)
+        const promotionsRes = await api.get('/products', {
+          params: { saleOnly: 'true', limit: 50, status: 'active' }
+        });
+        if (alive) {
+          const allPromotions = promotionsRes?.data?.items || [];
+          const productsWithDiscount = allPromotions
+            .filter(item => {
+              const price = item.price || 0;
+              const salePrice = item.salePrice || 0;
+              return salePrice > 0 && salePrice < price && item._id !== id;
+            })
+            .map(item => {
+              const price = item.price || 0;
+              const salePrice = item.salePrice || 0;
+              const discount = ((price - salePrice) / price) * 100;
+              return { ...item, discount };
+            })
+            .sort((a, b) => b.discount - a.discount)
+            .slice(0, 10);
+          setPromotions(productsWithDiscount);
+        }
+
+        // 🔽 Reviews thật
+        setRvLoading(true);
+        try {
+          const rv = await fetchReviews(id, { page: 1, limit: 20 });
+          if (alive) setReviews(rv.items || []);
+        } finally {
+          if (alive) setRvLoading(false);
+        }
+      } catch {
+        navigate('/collection', { replace: true });
       } finally {
-        if (alive) setRvLoading(false);
+        if (alive) setLoading(false);
       }
-    } catch {
-      navigate('/collection', { replace: true });
-    } finally {
-      if (alive) setLoading(false);
-    }
-  })();
-  return () => { alive = false; };
-}, [id, navigate]);
+    })();
+    return () => { alive = false; };
+  }, [id, navigate]);
 
 
   const onAddToCart = () => {
@@ -436,30 +436,30 @@ export default function ProductDetail() {
   //   if (!r.name || !r.content) return alert('Vui lòng nhập tên và nội dung đánh giá.');
   //   setLocalReviews(prev => [r, ...prev]);
   //   setReviewForm({ rating: 5, name: '', content: '' });
-const submitReview = async (e) => {
-  e.preventDefault();
-  if (!user) {
-    alert('Vui lòng đăng nhập để đánh giá.');
-    return;
-  }
-  const payload = {
-    name: user.name || user.email || 'Khách',
-    content: reviewForm.content?.trim(),
-    rating: Number(reviewForm.rating) || 5,
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert('Vui lòng đăng nhập để đánh giá.');
+      return;
+    }
+    const payload = {
+      name: user.name || user.email || 'Khách',
+      content: reviewForm.content?.trim(),
+      rating: Number(reviewForm.rating) || 5,
+    };
+    if (!payload.content) {
+      alert('Vui lòng nhập nội dung đánh giá.');
+      return;
+    }
+    try {
+      const rv = await createReview(id, payload);
+      setReviews((prev) => [rv, ...prev]);            // prepend review mới
+      setReviewForm({ rating: 5, name: '', content: '' }); // Reset form
+    } catch (err) {
+      console.error(err);
+      alert('Gửi đánh giá thất bại. Vui lòng thử lại.');
+    }
   };
-  if (!payload.content) {
-    alert('Vui lòng nhập nội dung đánh giá.');
-    return;
-  }
-  try {
-    const rv = await createReview(id, payload);
-    setReviews((prev) => [rv, ...prev]);            // prepend review mới
-    setReviewForm({ rating: 5, name: '', content: '' }); // Reset form
-  } catch (err) {
-    console.error(err);
-    alert('Gửi đánh giá thất bại. Vui lòng thử lại.');
-  }
-};
 
   // ====== return chỉ nằm sau tất cả hooks ======
   if (loading) {
@@ -622,12 +622,12 @@ const submitReview = async (e) => {
           <form onSubmit={submitReview} className="mb-6 bg-white">
             <div className="flex items-center gap-3">
               {/* Avatar người dùng bên trái */}
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                {user.avatar || user.picture ? (
-                  <img 
-                    src={user.avatar || user.picture} 
-                    alt={user.name || 'User'} 
-                    className="w-full h-full object-cover" 
+              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0 border border-gray-200">
+                {user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name || 'User'}
+                    className="w-full h-full object-cover"
                   />
                 ) : (
                   <span className="text-gray-600 font-semibold text-sm">
@@ -650,7 +650,7 @@ const submitReview = async (e) => {
               {/* Rating và nút gửi - cùng hàng */}
               <div className="flex items-center gap-3 flex-shrink-0">
                 <StarRating value={reviewForm.rating} onChange={(v) => setReviewForm(f => ({ ...f, rating: v }))} size={20} />
-                <button 
+                <button
                   type="submit"
                   disabled={!reviewForm.content.trim()}
                   className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-600 hover:bg-gray-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -674,9 +674,9 @@ const submitReview = async (e) => {
               <div key={r._id || i} className="bg-white border rounded-lg p-4">
                 {/* Header: Avatar + Username */}
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {r.avatar ? (
-                      <img src={r.avatar} alt={r.name || 'User'} className="w-full h-full object-cover" />
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0 border border-gray-200">
+                    {r.user?.avatarUrl || r.avatar ? (
+                      <img src={r.user?.avatarUrl || r.avatar} alt={r.name || 'User'} className="w-full h-full object-cover" />
                     ) : (
                       <span className="text-gray-600 font-semibold text-sm">
                         {(r.name || 'U').charAt(0).toUpperCase()}
@@ -693,8 +693,8 @@ const submitReview = async (e) => {
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((s) => (
                       <svg key={s} width={18} height={18} viewBox="0 0 20 20" fill="currentColor"
-                           className={r.rating >= s ? 'text-red-500' : 'text-gray-300'}>
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.562-.954L10 0l2.948 5.956 6.562.954-4.755 4.635 1.123 6.545z"/>
+                        className={r.rating >= s ? 'text-red-500' : 'text-gray-300'}>
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.562-.954L10 0l2.948 5.956 6.562.954-4.755 4.635 1.123 6.545z" />
                       </svg>
                     ))}
                   </div>
