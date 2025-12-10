@@ -12,7 +12,7 @@ export const getDashboardStats = async (req, res) => {
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
+//duy 
     // Thống kê cơ bản
     const [
       totalOrders,
