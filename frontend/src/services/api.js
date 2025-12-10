@@ -1,17 +1,18 @@
 // src/services/api.js
-import axios from 'axios';
+import axios from "axios";
 
-const baseURL = 'https://luxevie-backend-five.vercel.app/api';
+const baseURL =
+  import.meta.env.VITE_API_URL || "https://luxevie-backend-five.vercel.app/api";
 
 export function getToken() {
   // cố gắng đọc theo vài kiểu lưu phổ biến
   // 1) token trực tiếp
-  const t1 = localStorage.getItem('token');
+  const t1 = localStorage.getItem("token");
   if (t1) return t1;
 
   // 2) object auth { token, user }
   try {
-    const auth = JSON.parse(localStorage.getItem('auth') || 'null');
+    const auth = JSON.parse(localStorage.getItem("auth") || "null");
     if (auth?.token) return auth.token;
   } catch {}
   return null;
@@ -36,7 +37,7 @@ api.interceptors.response.use(
     const status = err?.response?.status;
     if (status === 401) {
       // phát event để UI biết token sai/hết hạn
-      window.dispatchEvent(new CustomEvent('auth_401'));
+      window.dispatchEvent(new CustomEvent("auth_401"));
       // tuỳ nhu cầu: điều hướng về login
       // import.meta.env.DEV && console.warn('401 Unauthorized – redirecting to /login');
       // window.location.href = '/login';
@@ -52,13 +53,12 @@ export function extractError(err) {
   const data = err?.response?.data;
   return {
     status: err?.response?.status || 0,
-    code: data?.code || 'ERROR',
-    message: data?.message || err?.message || 'Unknown error',
+    code: data?.code || "ERROR",
+    message: data?.message || err?.message || "Unknown error",
   };
 }
 
-
 export async function loginWithGoogle(credential) {
-  const { data } = await api.post('/auth/google', { credential });
+  const { data } = await api.post("/auth/google", { credential });
   return data; // { token, user }
 }
