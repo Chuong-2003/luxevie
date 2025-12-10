@@ -29,7 +29,7 @@ export default function CoreAdminLayout() {
         </CHeaderBrand>
         <CHeaderNav className="ms-auto me-3">
           <CNavItem>
-            <CNavLink href="/" role="button">Về trang bán hàng</CNavLink>
+            <CNavLink as={Link} to="/" role="button">Về trang bán hàng</CNavLink>
           </CNavItem>
           <CNavItem>
             <CAvatar size="md" color="secondary" textColor="white">AD</CAvatar>
@@ -41,9 +41,9 @@ export default function CoreAdminLayout() {
       <CSidebar position="fixed" visible={sidebarOpen} onVisibleChange={setSidebarOpen}>
         <CSidebarHeader>
           <CSidebarBrand>
-            <img 
-              src="https://res.cloudinary.com/dqawqvxcr/image/upload/v1761117182/LuxeVie_2_zvsptx.png" 
-              alt="LuxeVie Logo" 
+            <img
+              src="https://res.cloudinary.com/dqawqvxcr/image/upload/v1761117182/LuxeVie_2_zvsptx.png"
+              alt="LuxeVie Logo"
               className="h-8 w-auto object-contain"
               style={{ maxWidth: '120px' }}
             />
