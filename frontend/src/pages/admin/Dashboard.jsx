@@ -1,5 +1,6 @@
 // src/pages/admin/Dashboard.jsx
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchAdminStats } from "../../services/adminStats";
 import BtnExportReport from "../../components/BtnExportReport";
 
@@ -8,18 +9,18 @@ const money = (n) => (Number(n || 0)).toLocaleString("vi-VN") + "₫";
 /* ---------- UI atoms ---------- */
 function Sparkline({ values = [], tone = "indigo" }) {
   const max = Math.max(...values, 1);
-  const color = {
-    indigo: "bg-indigo-300",
-    emerald: "bg-emerald-300",
-    amber: "bg-amber-300",
-    violet: "bg-violet-300",
-  }[tone] || "bg-gray-300";
+  const colors = {
+    indigo: "bg-indigo-500",
+    emerald: "bg-emerald-500",
+    amber: "bg-amber-500",
+    violet: "bg-violet-500",
+  };
   return (
-    <div className="h-14 flex items-end gap-1.5">
+    <div className="h-8 flex items-end gap-1 mt-auto">
       {values.map((v, i) => (
         <div
           key={i}
-          className={`flex-1 rounded ${color}`}
+          className={`flex-1 rounded-t-sm ${colors[tone] || "bg-gray-300"}`}
           style={{ height: `${(v / max) * 100}%` }}
         />
       ))}
@@ -58,41 +59,76 @@ function CardShell({ title, action, children, desc }) {
 }
 
 function KpiCard({ title, value, delta, icon = "📈", tone = "indigo", hint, spark = [] }) {
-  const toneMap = {
-    indigo: { bg: "from-indigo-50 to-sky-50", icon: "text-indigo-600" },
-    emerald: { bg: "from-emerald-50 to-teal-50", icon: "text-emerald-600" },
-    amber: { bg: "from-amber-50 to-yellow-50", icon: "text-amber-600" },
-    violet: { bg: "from-violet-50 to-fuchsia-50", icon: "text-violet-600" },
-  }[tone];
+  const colors = {
+    indigo: {
+      text: "text-blue-600",
+      bgIcon: "bg-gradient-to-br from-blue-500 to-indigo-600",
+      pill: "bg-blue-50 text-blue-700",
+      blob: "bg-blue-500"
+    },
+    emerald: {
+      text: "text-emerald-600",
+      bgIcon: "bg-gradient-to-br from-emerald-500 to-teal-600",
+      pill: "bg-emerald-50 text-emerald-700",
+      blob: "bg-emerald-500"
+    },
+    amber: {
+      text: "text-amber-600",
+      bgIcon: "bg-gradient-to-br from-amber-400 to-orange-500",
+      pill: "bg-amber-50 text-amber-700",
+      blob: "bg-amber-500"
+    },
+    violet: {
+      text: "text-violet-600",
+      bgIcon: "bg-gradient-to-br from-violet-500 to-purple-600",
+      pill: "bg-violet-50 text-violet-700",
+      blob: "bg-violet-500"
+    },
+  }[tone] || {
+    text: "text-gray-600",
+    bgIcon: "bg-gray-600",
+    pill: "bg-gray-100 text-gray-700",
+    blob: "bg-gray-400"
+  };
+
+  const isPositive = delta > 0;
+  const TrendIcon = isPositive ? (
+    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+  ) : (
+    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
+  );
 
   return (
-    <div className="rounded-2xl border overflow-hidden">
-      <div className={`p-4 md:p-5 bg-gradient-to-br ${toneMap.bg}`}>
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-600">{title}</div>
-          <div className={`h-9 w-9 rounded-xl bg-white/70 backdrop-blur flex items-center justify-center ${toneMap.icon}`}>
-            <span className="text-lg">{icon}</span>
-          </div>
+    <div className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)] transition-all duration-300 border border-gray-100">
+      <div className="flex justify-between items-start z-10 relative">
+        <div>
+          <p className="text-sm font-semibold tracking-wider text-gray-500 uppercase">{title}</p>
+          <h3 className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight">{value}</h3>
         </div>
-        <div className="mt-2 text-2xl font-semibold tracking-tight">{value}</div>
-        <div className="mt-1 text-xs flex items-center gap-2">
-          {!!delta && (
-            <span
-              className={`inline-flex items-center rounded-full px-2 py-0.5 ${
-                delta > 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"
-              }`}
-            >
-              {delta > 0 ? "▲" : "▼"} {Math.abs(delta)}%
-            </span>
-          )}
-          {hint && <span className="text-gray-500">{hint}</span>}
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg ${colors.bgIcon} transform group-hover:scale-110 transition-transform duration-300`}>
+          <span className="text-xl font-medium">{icon}</span>
         </div>
       </div>
-      {spark?.length ? (
-        <div className="px-4 pb-4">
+
+      <div className="mt-4 flex items-center gap-3 relative z-10">
+        {!!delta && (
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
+            {isPositive ? '↑' : '↓'} {Math.abs(delta)}%
+          </span>
+        )}
+        {hint && <span className="text-xs font-medium text-gray-400">{hint}</span>}
+      </div>
+
+      {/* Decorative Blob */}
+      <div className={`absolute -right-8 -bottom-8 w-32 h-32 rounded-full opacity-[0.08] ${colors.blob} blur-2xl group-hover:opacity-[0.15] transition-opacity duration-500`} />
+
+      {/* Sparkline Integration */}
+      {spark?.length > 0 && (
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-0 opacity-40 group-hover:opacity-60 transition-opacity">
+          {/* Reusing Sparkline component but adjusting its container placement if needed */}
           <Sparkline values={spark} tone={tone} />
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -146,12 +182,12 @@ export default function Dashboard() {
             <option value="90d">90 ngày</option>
           </select>
           <BtnExportReport />
-          <a
-            href="/admin/coupons"
+          <Link
+            to="/admin/coupons"
             className="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm hover:bg-indigo-700"
           >
             Tạo khuyến mãi
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -167,40 +203,32 @@ export default function Dashboard() {
         ) : (
           <>
             <KpiCard
-              title="Doanh thu (gần nhất)"
+              title="Doanh thu"
               value={money(stats.revenue)}
               delta={12}
-              icon="₫"
-              tone="violet"
-              hint="so với kỳ trước"
-              spark={[6, 9, 7, 11, 9, 13, 12]}
+              color="blue"
+              spark={[6, 9, 7, 11, 9, 13, 12, 14, 11, 15, 13, 16, 14]}
             />
             <KpiCard
               title="Đơn hàng"
               value={stats.ordersTotal}
               delta={5}
-              icon="🧾"
-              tone="indigo"
-              hint="đơn đã tạo"
-              spark={[4, 5, 3, 8, 6, 9, 7]}
+              color="teal"
+              spark={[4, 5, 3, 8, 6, 9, 7, 10, 8, 11, 9, 12, 10]}
             />
             <KpiCard
               title="Sản phẩm"
               value={stats.productsTotal}
               delta={-3}
-              icon="📦"
-              tone="amber"
-              hint="đang hiển thị"
-              spark={[10, 12, 11, 9, 10, 12, 11]}
+              color="yellow"
+              spark={[10, 12, 11, 9, 10, 12, 11, 13, 11, 14, 12, 10, 8]}
             />
             <KpiCard
               title="Người dùng"
               value={stats.usersTotal}
               delta={9}
-              icon="👤"
-              tone="emerald"
-              hint="đăng ký mới"
-              spark={[2, 3, 2, 4, 3, 5, 4]}
+              color="red"
+              spark={[2, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7]}
             />
           </>
         )}
@@ -211,7 +239,7 @@ export default function Dashboard() {
         <CardShell
           title="Đơn hàng mới"
           desc="5 đơn gần nhất"
-          action={<a href="/admin/orders" className="text-sm text-indigo-600 hover:underline">Xem tất cả</a>}
+          action={<Link to="/admin/orders" className="text-sm text-indigo-600 hover:underline">Xem tất cả</Link>}
         >
           {loading ? (
             <div className="space-y-2">
@@ -254,7 +282,7 @@ export default function Dashboard() {
         <CardShell
           title="Sản phẩm bán chạy"
           desc="Top demo (thay bằng API thật)"
-          action={<a href="/admin/products" className="text-sm text-indigo-600 hover:underline">Quản lý</a>}
+          action={<Link to="/admin/products" className="text-sm text-indigo-600 hover:underline">Quản lý</Link>}
         >
           <ul className="divide-y">
             {["Áo thun Basic", "Quần jeans Slim", "Áo khoác Hoodie", "Ví da Mini", "Giày Runner"].map((p, i) => (
@@ -322,10 +350,10 @@ export default function Dashboard() {
 
         <CardShell title="Hành động nhanh">
           <div className="grid grid-cols-2 gap-3">
-            <a href="/admin/products/new" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">➕ Thêm sản phẩm</a>
-            <a href="/admin/orders" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">🚚 Xử lý đơn</a>
-            <a href="/admin/users" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">👤 Quản lý user</a>
-            <a href="/admin/coupons" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">🎟️ Mã giảm giá</a>
+            <Link to="/admin/products/new" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">➕ Thêm sản phẩm</Link>
+            <Link to="/admin/orders" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">🚚 Xử lý đơn</Link>
+            <Link to="/admin/users" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">👤 Quản lý user</Link>
+            <Link to="/admin/coupons" className="rounded-xl border p-4 hover:bg-gray-50 text-sm">🎟️ Mã giảm giá</Link>
           </div>
         </CardShell>
       </div>
