@@ -18,9 +18,12 @@ import brandSectionRoutes from './brandSectionRoutes.js';
 import brandRoutes from './brandRoutes.js';
 import momoRoutes from './momoRoutes.js';
 import reportRoutes from './reportRoutes.js';
+import chatRoutes from './chatRoutes.js';
+
 const router = Router();
 router.get('/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 router.use('/auth', authRoutes);
+router.use('/', chatRoutes);
 
 
 // public + admin products
