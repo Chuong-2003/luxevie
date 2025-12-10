@@ -1,5 +1,6 @@
 // src/components/CarouselHero.jsx
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const imgs = [
   'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?q=80&w=1800&auto=format&fit=crop',
@@ -24,16 +25,15 @@ export default function CarouselHero() {
             key={src}
             src={src}
             alt=""
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-              idx === i ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${idx === i ? 'opacity-100' : 'opacity-0'
+              }`}
             loading="lazy"
           />
         ))}
 
         {/* CTA */}
         <div className="absolute left-6 top-6 sm:left-8 sm:top-8">
-          <a href="/collection" className="btn-primary">Khám phá</a>
+          <Link to="/collection" className="btn-primary">Khám phá</Link>
         </div>
 
         {/* Dots */}
@@ -42,9 +42,8 @@ export default function CarouselHero() {
             <button
               key={idx}
               onClick={() => setI(idx)}
-              className={`h-2 w-2 rounded-full transition ${
-                idx === i ? 'bg-white' : 'bg-white/40'
-              }`}
+              className={`h-2 w-2 rounded-full transition ${idx === i ? 'bg-white' : 'bg-white/40'
+                }`}
               aria-label={`Slide ${idx + 1}`}
             />
           ))}
