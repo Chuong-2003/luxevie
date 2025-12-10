@@ -4,7 +4,7 @@ import { extractError } from "../../services/api";
 
 const fmtDate = (d) => d ? new Date(d).toLocaleString() : "—";
 
-const empty = { code:"", type:"percent", value:"", maxUses:"", expiresAt:"", active:true, note:"" };
+const empty = { code: "", type: "percent", value: "", maxUses: "", expiresAt: "", active: true, note: "" };
 
 const TYPE_CONFIG = {
   percent: { label: 'Phần trăm', color: 'blue', icon: '📊' },
@@ -22,13 +22,13 @@ const StatusBadge = ({ coupon }) => {
   const now = new Date();
   const isExpired = coupon.expiresAt && new Date(coupon.expiresAt) < now;
   const isMaxUsed = coupon.maxUses && coupon.used >= coupon.maxUses;
-  
+
   let status = 'active';
   if (isExpired || isMaxUsed) status = 'expired';
   else if (!coupon.active) status = 'inactive';
-  
+
   const config = STATUS_CONFIG[status] || { label: status, color: 'gray', icon: '❓' };
-  
+
   const colorClasses = {
     green: 'bg-green-100 text-green-800 border-green-200',
     red: 'bg-red-100 text-red-800 border-red-200',
@@ -46,7 +46,7 @@ const StatusBadge = ({ coupon }) => {
 // Component TypeBadge
 const TypeBadge = ({ type }) => {
   const config = TYPE_CONFIG[type] || { label: type, color: 'gray', icon: '❓' };
-  
+
   const colorClasses = {
     blue: 'bg-blue-100 text-blue-800 border-blue-200',
     green: 'bg-green-100 text-green-800 border-green-200',
@@ -66,7 +66,7 @@ const CouponCard = ({ coupon, onToggle, onRemove }) => {
   const now = new Date();
   const isExpired = coupon.expiresAt && new Date(coupon.expiresAt) < now;
   const isMaxUsed = coupon.maxUses && coupon.used >= coupon.maxUses;
-  
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200 p-4">
       <div className="flex items-start justify-between mb-3">
@@ -78,8 +78,8 @@ const CouponCard = ({ coupon, onToggle, onRemove }) => {
           </div>
           <div className="text-sm text-gray-600">
             <div className="font-medium">
-              {coupon.type === 'percent' 
-                ? `Giảm ${coupon.value}%` 
+              {coupon.type === 'percent'
+                ? `Giảm ${coupon.value}%`
                 : `Giảm ${Number(coupon.value || 0).toLocaleString()}₫`
               }
             </div>
@@ -93,7 +93,7 @@ const CouponCard = ({ coupon, onToggle, onRemove }) => {
           <div>Giới hạn: {coupon.maxUses || '∞'}</div>
         </div>
       </div>
-      
+
       <div className="text-xs text-gray-500 mb-3">
         {coupon.expiresAt ? (
           <div>
@@ -104,24 +104,23 @@ const CouponCard = ({ coupon, onToggle, onRemove }) => {
           <div>Không giới hạn thời gian</div>
         )}
       </div>
-      
+
       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
         <div className="text-xs text-gray-500">
           ID: {coupon._id.slice(-6)}
         </div>
         <div className="flex space-x-2">
-          <button 
-            style={{display:"none"}}
+          <button
+            style={{ display: "none" }}
             onClick={() => onToggle(coupon)}
-            className={`inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-              coupon.active 
-                ? 'text-orange-600 bg-orange-50 hover:bg-orange-100' 
+            className={`inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${coupon.active
+                ? 'text-orange-600 bg-orange-50 hover:bg-orange-100'
                 : 'text-green-600 bg-green-50 hover:bg-green-100'
-            }`}
+              }`}
           >
             {coupon.active ? 'Tắt' : 'Bật'}
           </button>
-          <button 
+          <button
             onClick={() => onRemove(coupon._id)}
             className="inline-flex items-center px-2.5 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
           >
@@ -208,7 +207,7 @@ export default function AdminCouponsList() {
           <h1 className="text-2xl font-bold text-gray-900">Quản lý mã giảm giá</h1>
           <p className="text-sm text-gray-600 mt-1">Tạo và quản lý các mã giảm giá cho khách hàng</p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {/* View Mode Toggle */}
           <div className="flex items-center gap-2">
@@ -216,27 +215,25 @@ export default function AdminCouponsList() {
             <div className="flex border border-gray-300 rounded-md">
               <button
                 onClick={() => setViewMode('card')}
-                className={`px-3 py-1.5 text-sm font-medium rounded-l-md transition-colors ${
-                  viewMode === 'card' 
-                    ? 'bg-blue-600 text-white' 
+                className={`px-3 py-1.5 text-sm font-medium rounded-l-md transition-colors ${viewMode === 'card'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 Card
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-3 py-1.5 text-sm font-medium rounded-r-md transition-colors ${
-                  viewMode === 'table' 
-                    ? 'bg-blue-600 text-white' 
+                className={`px-3 py-1.5 text-sm font-medium rounded-r-md transition-colors ${viewMode === 'table'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 Bảng
               </button>
             </div>
           </div>
-          
+
           {/* Add Coupon Button */}
           <button
             onClick={() => setShowForm(!showForm)}
@@ -262,7 +259,7 @@ export default function AdminCouponsList() {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -276,7 +273,7 @@ export default function AdminCouponsList() {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -290,7 +287,7 @@ export default function AdminCouponsList() {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -314,84 +311,84 @@ export default function AdminCouponsList() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mã giảm giá</label>
-                <input 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                  value={form.code} 
-                  onChange={e=>setForm(f=>({...f, code:e.target.value}))} 
-                  placeholder="SUMMER10" 
+                <input
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={form.code}
+                  onChange={e => setForm(f => ({ ...f, code: e.target.value }))}
+                  placeholder="SUMMER10"
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Loại giảm giá</label>
-                <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                  value={form.type} 
-                  onChange={e=>setForm(f=>({...f, type:e.target.value}))}
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={form.type}
+                  onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
                 >
                   <option value="percent">📊 Phần trăm (%)</option>
                   <option value="fixed">💰 Cố định (₫)</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Giá trị</label>
-                <input 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                  type="number" 
-                  value={form.value} 
-                  onChange={e=>setForm(f=>({...f, value:e.target.value}))} 
-                  placeholder={form.type === 'percent' ? '10' : '50000'} 
+                <input
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  type="number"
+                  value={form.value}
+                  onChange={e => setForm(f => ({ ...f, value: e.target.value }))}
+                  placeholder={form.type === 'percent' ? '10' : '50000'}
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Số lần sử dụng tối đa</label>
-                <input 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                  type="number" 
-                  value={form.maxUses} 
-                  onChange={e=>setForm(f=>({...f, maxUses:e.target.value}))} 
+                <input
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  type="number"
+                  value={form.maxUses}
+                  onChange={e => setForm(f => ({ ...f, maxUses: e.target.value }))}
                   placeholder="Không giới hạn"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ngày hết hạn</label>
-                <input 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                  type="datetime-local" 
-                  value={form.expiresAt} 
-                  onChange={e=>setForm(f=>({...f, expiresAt:e.target.value}))}
+                <input
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  type="datetime-local"
+                  value={form.expiresAt}
+                  onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))}
                 />
               </div>
-              
+
               <div className="flex items-end">
                 <label className="flex items-center space-x-2">
-                  <input 
-                    type="checkbox" 
-                    checked={form.active} 
-                    onChange={e=>setForm(f=>({...f, active:e.target.checked}))}
+                  <input
+                    type="checkbox"
+                    checked={form.active}
+                    onChange={e => setForm(f => ({ ...f, active: e.target.checked }))}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-700">Kích hoạt ngay</span>
                 </label>
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
-              <textarea 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                placeholder="Ghi chú về mã giảm giá (tùy chọn)" 
-                value={form.note} 
-                onChange={e=>setForm(f=>({...f, note:e.target.value}))}
+              <textarea
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Ghi chú về mã giảm giá (tùy chọn)"
+                value={form.note}
+                onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
                 rows={2}
               />
             </div>
-            
+
             <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
               <button
                 type="button"
@@ -423,15 +420,15 @@ export default function AdminCouponsList() {
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <input 
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-              placeholder="Tìm theo mã giảm giá..." 
-              value={q} 
-              onChange={e=>setQ(e.target.value)}
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Tìm theo mã giảm giá..."
+              value={q}
+              onChange={e => setQ(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') load(); }}
             />
           </div>
-          <button 
+          <button
             onClick={load}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 transition-colors"
           >
@@ -485,8 +482,8 @@ export default function AdminCouponsList() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hết hạn</th>
                       <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
                       <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
-            </tr>
-          </thead>
+                    </tr>
+                  </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {items.map(coupon => (
                       <tr key={coupon._id} className="hover:bg-gray-50">
@@ -515,29 +512,28 @@ export default function AdminCouponsList() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div className="flex space-x-2">
-                            <button 
+                            <button
                               onClick={() => toggleActive(coupon)}
-                              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                                coupon.active 
-                                  ? 'text-orange-600 bg-orange-50 hover:bg-orange-100' 
+                              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${coupon.active
+                                  ? 'text-orange-600 bg-orange-50 hover:bg-orange-100'
                                   : 'text-green-600 bg-green-50 hover:bg-green-100'
-                              }`}
+                                }`}
                             >
                               {coupon.active ? 'Tắt' : 'Bật'}
                             </button>
-                            <button 
+                            <button
                               onClick={() => remove(coupon._id)}
                               className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
                             >
                               Xóa
                             </button>
-                  </div>
+                          </div>
                         </td>
-              </tr>
+                      </tr>
                     ))}
-          </tbody>
-        </table>
-      </div>
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>
@@ -561,4 +557,4 @@ function Field({ label, children }) {
   );
 }
 function Th({ children }) { return <th className="px-3 py-2 text-left font-medium">{children}</th>; }
-function Td({ children, className="" }) { return <td className={`px-3 py-2 ${className}`}>{children}</td>; }
+function Td({ children, className = "" }) { return <td className={`px-3 py-2 ${className}`}>{children}</td>; }
