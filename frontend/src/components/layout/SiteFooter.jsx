@@ -55,28 +55,7 @@ export default function SiteFooter() {
           </div>
         </div>
       </footer>
-      <a
-        href="https://zalo.me/0394379537"
-        target="_blank"
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 9999,
-        }}
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/768px-Icon_of_Zalo.svg.png"
-          alt="Zalo"
-          style={{
-            width: "60px",
-            height: "60px",
-            borderRadius: "50%",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-            cursor: "pointer"
-          }}
-        />
-      </a>
+      
     </>
   );
 }
