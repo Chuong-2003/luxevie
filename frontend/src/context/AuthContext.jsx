@@ -99,7 +99,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <Ctx.Provider value={{ user, loading, login, logout }}>
+    <Ctx.Provider value={{ user, loading, login, logout, refreshUser: fetchMe }}>
       {children}
     </Ctx.Provider>
   );
