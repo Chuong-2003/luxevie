@@ -1,3 +1,5 @@
+
+
 import { Router } from 'express';
 import authRoutes from './authRoutes.js';
 import productRoutes from './productRoutes.js';
